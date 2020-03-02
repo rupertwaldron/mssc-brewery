@@ -8,6 +8,10 @@ public class MsscBreweryApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MsscBreweryApplication.class, args);
+		String rup = "rup";
+		if ("rup" == rup) {
+			System.out.println("Strings match");
+		}
 	}
 
 }
