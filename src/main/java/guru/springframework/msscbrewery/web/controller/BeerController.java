@@ -23,7 +23,7 @@ public class BeerController {
 
     @GetMapping("/{beerId}")
     @ResponseStatus(HttpStatus.OK)
-    public BeerDto getBeer(@PathVariable("beerId") UUID beerId){
+    public BeerDto getBeer(@PathVariable("beerId") UUID beerId) {
         return beerService.getBeerById(beerId);
     }
 
@@ -42,15 +42,13 @@ public class BeerController {
     @PutMapping("/{beerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateBeer(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beerDto) {
-        var updatedBeer = beerService.updateBeer(beerDto);
-        if (updatedBeer == null) System.out.println("Couldn't find resource");
+        beerService.updateBeer(beerDto);
     }
 
     @DeleteMapping("/{beerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBeer(@PathVariable("beerId") UUID beerId) {
-        var deletedBeer = beerService.deleteBeer(beerId);
-        if (deletedBeer == null) System.out.println("Couldn't find resource");
+        beerService.deleteBeer(beerId);
     }
 
 }

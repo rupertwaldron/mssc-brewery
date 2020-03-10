@@ -1,8 +1,9 @@
 package guru.springframework.msscbrewery.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.springframework.msscbrewery.services.BeerService;
+import guru.springframework.msscbrewery.services.CustomerService;
 import guru.springframework.msscbrewery.web.model.BeerDto;
+import guru.springframework.msscbrewery.web.model.CustomerDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,11 +23,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest(BeerController.class)
-public class BeerControllerTest {
+@WebMvcTest(CustomerController.class)
+public class CustomerControllerTest {
 
     @MockBean
-    BeerService beerService;
+    CustomerService customerService;
 
     @Autowired
     MockMvc mockMvc;
@@ -35,70 +36,79 @@ public class BeerControllerTest {
     ObjectMapper objectMapper;
 
     @InjectMocks
-    BeerController beerController;
+    CustomerController customerController;
+
+    CustomerDto validCustomer;
 
     BeerDto validBeer;
 
     @BeforeEach
     public void setUp() {
+
         validBeer = BeerDto.builder()
             .id(UUID.randomUUID())
             .beerName("Fanny's Arse")
             .beerStyle("Sour Mash")
             .upc(12324L)
             .build();
+
+        validCustomer = CustomerDto.builder()
+            .id(UUID.randomUUID())
+            .favouriteBeer(validBeer)
+            .name("Rupert Waldron")
+            .build();
     }
 
     @Test
-    public void getBeer() throws Exception {
-        given(beerService.getBeerById(any(UUID.class))).willReturn(validBeer);
+    public void getCustomer() throws Exception {
+        given(customerService.getCustomerById(any(UUID.class))).willReturn(validCustomer);
 
-        mockMvc.perform(get("/api/v1/beers/" + validBeer.getId().toString()).accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/customers/" + validCustomer.getId().toString()).accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.id", is(validBeer.getId().toString())))
-            .andExpect(jsonPath("$.beerName", is("Fanny's Arse")));    }
+            .andExpect(jsonPath("$.id", is(validCustomer.getId().toString())))
+            .andExpect(jsonPath("$.name", is("Rupert Waldron")));    }
 
     @Test
-    public void getBeers() {
+    public void getCustomers() {
     }
 
     @Test
     public void handlePost() throws Exception {
         //given
-        BeerDto beerDto = validBeer;
-        beerDto.setId(null);
-        String beerDtoJson = objectMapper.writeValueAsString(beerDto);
+        CustomerDto customerDto = validCustomer;
+        customerDto.setId(null);
+        String customerDtoJson = objectMapper.writeValueAsString(customerDto);
 
-        mockMvc.perform(post("/api/v1/beers/")
+        mockMvc.perform(post("/api/v1/customers/")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(beerDtoJson))
+            .content(customerDtoJson))
             .andExpect(status().isCreated());
     }
 
     @Test
-    public void updateBeer() throws Exception {
+    public void updateCustomer() throws Exception {
         //given
-        BeerDto beerDto = validBeer;
-        String beerDtoJson = objectMapper.writeValueAsString(beerDto);
+        CustomerDto customerDto = validCustomer;
+        String customerDtoJson = objectMapper.writeValueAsString(customerDto);
 
         //when
-        mockMvc.perform(put("/api/v1/beers/" + validBeer.getId())
+        mockMvc.perform(put("/api/v1/customers/" + validCustomer.getId())
             .contentType(MediaType.APPLICATION_JSON)
-            .content(beerDtoJson))
+            .content(customerDtoJson))
             .andExpect(status().isNoContent());
 
-        then(beerService).should().updateBeer(any());
+        then(customerService).should().updateCustomer(any());
     }
 
     @Test
-    public void deleteBeer() throws Exception {
+    public void deleteCustomer() throws Exception {
         //given
 
         //when
-        mockMvc.perform(delete("/api/v1/beers/" + validBeer.getId()))
+        mockMvc.perform(delete("/api/v1/customers/" + validCustomer.getId()))
             .andExpect(status().isNoContent());
 
-        then(beerService).should().deleteBeer(any(UUID.class));
+        then(customerService).should().deleteCustomer(any(UUID.class));
     }
 }

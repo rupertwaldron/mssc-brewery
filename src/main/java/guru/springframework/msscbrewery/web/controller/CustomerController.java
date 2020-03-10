@@ -3,18 +3,15 @@ package guru.springframework.msscbrewery.web.controller;
 import guru.springframework.msscbrewery.services.CustomerService;
 import guru.springframework.msscbrewery.web.model.CustomerDto;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by jt on 2019-04-20.
  */
-@RequestMapping("/api/v1/customer")
+@RequestMapping("/api/v1/customers")
 @RestController
 public class CustomerController {
 
@@ -24,10 +21,34 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping({"/{customerId}"})
-    public ResponseEntity<CustomerDto> getBeer(@PathVariable("customerId") UUID customerId){
+    @GetMapping("/{customerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CustomerDto getCustomer(@PathVariable("customerId") UUID customerId) {
+        return customerService.getCustomerById(customerId);
+    }
 
-        return new ResponseEntity<>(customerService.getCustomerById(customerId), HttpStatus.OK);
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<CustomerDto> getCustomers() {
+        return customerService.listAllCustomers();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void handlePost(@RequestBody CustomerDto customerDto) {
+        customerService.saveNewCustomer(customerDto);
+    }
+
+    @PutMapping("/{customerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateCustomer(@PathVariable("customerId") UUID customerId, @RequestBody CustomerDto customerDto) {
+        customerService.updateCustomer(customerDto);
+    }
+
+    @DeleteMapping("/{customerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCustomer(@PathVariable("customerId") UUID customerId) {
+        customerService.deleteCustomer(customerId);
     }
 
 }

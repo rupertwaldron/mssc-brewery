@@ -2,6 +2,7 @@ package guru.springframework.msscbrewery.services;
 
 import guru.springframework.msscbrewery.respositories.BeerRepository;
 import guru.springframework.msscbrewery.web.model.BeerDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,10 +11,11 @@ import java.util.UUID;
 /**
  * Created by jt on 2019-04-20.
  */
+@Slf4j
 @Service
 public class BeerServiceImpl implements BeerService {
 
-    private BeerRepository beerRepository;
+    private final BeerRepository beerRepository;
 
     public BeerServiceImpl(BeerRepository beerRepository) {
         this.beerRepository = beerRepository;
@@ -21,26 +23,27 @@ public class BeerServiceImpl implements BeerService {
 
     @Override
     public BeerDto getBeerById(UUID beerId) {
-        return beerRepository.findBeer(beerId);
+        return beerRepository.findById(beerId);
     }
 
     @Override
-    public BeerDto saveNewBeer(BeerDto beerDto) {
-        return beerRepository.saveBeer(beerDto);
+    public void saveNewBeer(BeerDto beerDto) {
+        beerRepository.saveEntity(beerDto);
     }
 
     @Override
     public List<BeerDto> listAllBeers() {
-        return beerRepository.listBeers();
+        return beerRepository.listAll();
     }
 
     @Override
-    public BeerDto updateBeer(BeerDto beerDto) {
-        return beerRepository.updateBeer(beerDto);
+    public void updateBeer(BeerDto beerDto) {
+        beerRepository.updateEntity(beerDto);
     }
 
     @Override
-    public BeerDto deleteBeer(UUID beerId) {
-        return beerRepository.deleteBeer(beerId);
+    public void deleteBeer(UUID beerId) {
+        log.info("Deleting beer");
+        beerRepository.deleteById(beerId);
     }
 }

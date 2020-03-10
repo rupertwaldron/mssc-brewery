@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class BeerRepository {
+public class BeerRepository implements Repo<BeerDto> {
     private Map<UUID, BeerDto> beers = new HashMap<>();
 
     public BeerRepository() {
@@ -26,25 +26,28 @@ public class BeerRepository {
         beers.put(beer2.getId(), beer2);
     }
 
-    public BeerDto findBeer(UUID uuid) {
+    @Override
+    public BeerDto findById(UUID uuid) {
         return beers.get(uuid);
     }
 
-    public BeerDto saveBeer(BeerDto beer) {
-        return beers.put(beer.getId(), beer);
+    @Override
+    public void saveEntity(BeerDto entity) {
+        beers.put(entity.getId(), entity);
     }
 
-    public BeerDto updateBeer(BeerDto beer) {
-        if (!beers.containsKey(beer.getId())) return null;
-        return beers.put(beer.getId(), beer);
+    @Override
+    public void updateEntity(BeerDto entity) {
+        if (beers.containsKey(entity.getId())) beers.put(entity.getId(), entity);
     }
 
-    public List<BeerDto> listBeers() {
+    @Override
+    public List<BeerDto> listAll() {
         return new ArrayList<>(beers.values());
     }
 
-    public BeerDto deleteBeer(UUID beerId) {
-        if (!beers.containsKey(beerId)) return null;
-        return beers.remove(beerId);
+    @Override
+    public void deleteById(UUID uuid) {
+        beers.remove(uuid);
     }
 }
