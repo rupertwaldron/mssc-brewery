@@ -24,13 +24,13 @@ public class CustomerRepository implements Repo<CustomerDto> {
             .build();
 
         var customer1 = CustomerDto.builder()
-            .id(UUID.randomUUID())
+            .id(UUID.fromString("60a590c4-c581-4282-b319-1a3bd2cdfb3e"))
             .favouriteBeer(beer1)
             .name("Gary Townsend")
             .build();
 
         var customer2 = CustomerDto.builder()
-            .id(UUID.randomUUID())
+            .id(UUID.fromString("ab1c5448-a596-4485-bd77-980aec746f26"))
             .name("Bob Martin")
             .favouriteBeer(beer2)
             .build();

@@ -11,13 +11,13 @@ public class BeerRepository implements Repo<BeerDto> {
 
     public BeerRepository() {
         var beer1 = BeerDto.builder()
-            .id(UUID.randomUUID())
+            .id(UUID.fromString("361b562e-9431-41f1-a9ac-0a3670f38c99"))
             .beerName("Galaxy Cat")
             .beerStyle("Pale Ale")
             .build();
 
         var beer2 = BeerDto.builder()
-            .id(UUID.randomUUID())
+            .id(UUID.fromString("78e11a49-8372-4892-8fed-98bb20152922"))
             .beerName("Bishops Tart")
             .beerStyle("IPA")
             .build();
